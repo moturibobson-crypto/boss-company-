@@ -223,8 +223,8 @@ body::after {
   opacity:0; transition:opacity 0.4s ease;
 }
 .product-card:hover .product-img-wrap::after { opacity:1; }
-.product-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 0.8s cubic-bezier(0.16,1,0.3,1); }
-.product-card:hover .product-img-wrap img { transform:scale(1.1); }
+.product-img-wrap img, .product-img-wrap video { width:100%; height:100%; object-fit:cover; transition:transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.product-card:hover .product-img-wrap img, .product-card:hover .product-img-wrap video { transform:scale(1.1); }
 .product-img-wrap .no-img { color:var(--text-3); font-size:13px; letter-spacing:1px; }
 .product-body { padding:28px; }
 .product-body h3 { font-family:var(--font-display); font-size:19px; font-weight:600; margin-bottom:10px; }
@@ -459,7 +459,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 <div class="security-notice" id="sec-notice">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-  <span>Secure local storage. Data never leaves your device.</span>
+  <span>Secure account and catalog service.</span>
 </div>
 
 <header class="site-header">
@@ -500,10 +500,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <div class="stat-card">
               <span style="font-size:32px;font-weight:700;display:block;color:var(--accent);font-family:var(--font-display);" id="stat-products">0</span>
               <small style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;">Products</small>
-            </div>
-            <div class="stat-card">
-              <span style="font-size:32px;font-weight:700;display:block;color:var(--accent-2);font-family:var(--font-display);" id="stat-users">0</span>
-              <small style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;">Members</small>
             </div>
             <div class="stat-card">
               <span style="font-size:32px;font-weight:700;display:block;color:var(--accent-3);font-family:var(--font-display);">24/7</span>
@@ -611,6 +607,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <input type="password" id="login-password" placeholder="Your password" required autocomplete="current-password">
       </div>
       <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+      <div id="google-signin" style="margin-top:14px;"></div>
+      <button type="button" class="btn btn-secondary" id="google-login-btn" style="width:100%;margin-top:12px;">Continue with Google</button>
       <p class="form-msg" id="login-msg"></p>
     </form>
   </div>
@@ -660,8 +658,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <input type="text" id="up-price" placeholder="e.g. 49.99" required>
           </div>
           <div class="form-group">
-            <label for="up-image">Product Image</label>
-            <input type="file" id="up-image" accept="image/*">
+            <label for="up-image">Product Photo or Video</label>
+            <input type="file" id="up-image" accept="image/*,video/*">
             <img id="up-preview" class="upload-preview hidden" alt="Preview">
           </div>
           <button type="submit" class="btn btn-primary">Upload Product</button>
@@ -768,6 +766,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   const DB_NAME = 'BossyCompanyDB';
   const DB_VERSION = 1;
   const LS_MIGRATED = 'bossy_migrated_v1';
+  const API_BASE = '/api';
 
   // ========================
   // INDEXEDDB ENGINE
@@ -900,6 +899,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   const $ = (id)=>document.getElementById(id);
   const now = ()=>new Date().toLocaleString();
 
+  async function api(path, options={}){
+    const token = sessionStorage.getItem('bossy_token');
+    const headers = Object.assign({'Content-Type':'application/json'}, options.headers || {});
+    if(token) headers.Authorization = 'Bearer '+token;
+    const response = await fetch(API_BASE + path, Object.assign({}, options, {headers}));
+    const body = response.status === 204 ? null : await response.json().catch(()=>({}));
+    if(!response.ok) throw new Error(body.error || 'Something went wrong.');
+    return body;
+  }
+  function setSession(result){
+    currentUser = result.user;
+    sessionStorage.setItem('bossy_token', result.token);
+    updateAuthUI();
+  }
+
   function toast(msg,type){
     const t = document.createElement('div'); t.className='toast '+type; t.textContent=msg;
     document.body.appendChild(t); setTimeout(()=>t.remove(),4000);
@@ -946,7 +960,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
   window.logout = function(){
     currentUser = null; isOwner = false;
-    sessionStorage.removeItem('bossy_session');
+    sessionStorage.removeItem('bossy_token');
     try{ closeModal('admin-modal'); }catch(e){}
     try{ closeModal('login-modal'); }catch(e){}
     updateAuthUI();
@@ -986,6 +1000,26 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   window.closeModalOnBackdrop = function(e,id){ if(e.target===$(id)) closeModal(id); };
 
   window.openGoogle = function(){ window.open('https://www.google.com','_blank','noopener'); };
+  window.googleSignIn = async function(){
+    const message = 'Google sign-in needs a GOOGLE_CLIENT_ID in the server environment before it can be enabled.';
+    toast(message, 'info');
+  };
+  async function initializeGoogleSignIn(){
+    try{
+      const config = await api('/config');
+      const button = $('google-login-btn');
+      if(!config.googleClientId || !window.google || !window.google.accounts) return;
+      button.classList.add('hidden');
+      google.accounts.id.initialize({client_id:config.googleClientId, callback:async ({credential})=>{
+        try{
+          const result = await api('/auth/google',{method:'POST',body:JSON.stringify({credential})});
+          setSession(result); closeModal('login-modal'); toast('Signed in with Google.','ok');
+        }catch(err){ $('login-msg').textContent=err.message; $('login-msg').className='form-msg err'; }
+      }});
+      google.accounts.id.renderButton($('google-signin'), {theme:'outline', size:'large', width:360, text:'continue_with'});
+    }catch(e){ console.warn('Google sign-in unavailable', e); }
+  }
+  window.initializeGoogleSignIn = initializeGoogleSignIn;
   window.openChrome = function(){
     const fallback = 'https://www.google.com';
     const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg|OPR|Brave|SamsungBrowser/.test(navigator.userAgent);
@@ -1089,15 +1123,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     const name=$('reg-name').value.trim(), email=$('reg-email').value.trim().toLowerCase(),
           phone=$('reg-phone').value.trim(), pass=$('reg-password').value;
     if(!name||!email||!phone||!pass){ $('reg-msg').textContent='All fields required.'; $('reg-msg').className='form-msg err'; return; }
-    const users = await db.getAll('users');
-    if(users.find(u=>u.email===email)){ $('reg-msg').textContent='Email already registered.'; $('reg-msg').className='form-msg err'; return; }
-    const hash = await sha256(pass);
-    const newUser = {id:Date.now(),name,email,phone,passwordHash:hash,registered:now(),isOwner:(email===OWNER_EMAIL)};
-    await db.put('users', newUser);
-    $('reg-msg').textContent='Account created! Welcome to Bossy Company.'; $('reg-msg').className='form-msg ok';
-    $('register-form').reset();
-    updateStats();
-    toast('Registration successful!','ok');
+    if(pass.length < 8){ $('reg-msg').textContent='Password must be at least 8 characters.'; $('reg-msg').className='form-msg err'; return; }
+    try{
+      const result = await api('/auth/register',{method:'POST',body:JSON.stringify({name,email,phone,password:pass})});
+      setSession(result); $('reg-msg').textContent='Account created. You are now signed in.'; $('reg-msg').className='form-msg ok';
+      $('register-form').reset(); toast('Registration successful!','ok');
+    }catch(err){ $('reg-msg').textContent=err.message; $('reg-msg').className='form-msg err'; }
   };
 
   // ========================
@@ -1106,17 +1137,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   window.handleLogin = async function(e){
     e.preventDefault();
     const email=$('login-email').value.trim().toLowerCase(), pass=$('login-password').value;
-    const users = await db.getAll('users');
-    const user = users.find(u=>u.email===email);
-    if(!user){ $('login-msg').textContent='Invalid email or password.'; $('login-msg').className='form-msg err'; return; }
-    const hash = await sha256(pass);
-    if(hash !== user.passwordHash){ $('login-msg').textContent='Invalid email or password.'; $('login-msg').className='form-msg err'; return; }
-    currentUser = user;
-    sessionStorage.setItem('bossy_session', String(user.id));
-    updateAuthUI();
-    closeModal('login-modal');
-    $('login-msg').textContent='';
-    toast('Welcome back, '+sanitize(user.name).split(' ')[0]+'!','ok');
+    try{
+      const result = await api('/auth/login',{method:'POST',body:JSON.stringify({email,password:pass})});
+      setSession(result); closeModal('login-modal'); $('login-form').reset(); $('login-msg').textContent='';
+      toast('Welcome back, '+sanitize(result.user.name).split(' ')[0]+'!','ok');
+    }catch(err){ $('login-msg').textContent=err.message; $('login-msg').className='form-msg err'; }
   };
 
   // ========================
@@ -1146,34 +1171,32 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       imageUrl = img && img.startsWith('data:') ? img : null;
     }
 
-    const product = {id:Date.now(),name,desc,price,image:imageUrl||null,created:now()};
-    await db.put('products', product);
-    $('up-msg').textContent='Product uploaded successfully!'; $('up-msg').className='form-msg ok';
-    e.target.reset(); $('up-preview').classList.add('hidden'); $('up-preview').src='';
-    pendingUploadFile = null;
-    renderProducts(); updateStats(); renderManageList();
-    toast('Product uploaded','ok');
+    try{
+      await api('/products',{method:'POST',body:JSON.stringify({name,description:desc,price,mediaData:imageUrl||null,mediaType:pendingUploadFile ? pendingUploadFile.type : null})});
+      $('up-msg').textContent='Product uploaded successfully!'; $('up-msg').className='form-msg ok';
+      e.target.reset(); $('up-preview').classList.add('hidden'); $('up-preview').src=''; pendingUploadFile = null;
+      await renderProducts(); await updateStats(); await renderManageList(); toast('Product uploaded','ok');
+    }catch(err){ $('up-msg').textContent=err.message; $('up-msg').className='form-msg err'; }
   };
 
   async function renderProducts(){
-    const products = await db.getAll('products');
     const grid=$('products-grid');
+    let products=[];
+    try { products=(await api('/products')).products || []; } catch(err) { grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:var(--error);">Products are temporarily unavailable. Please refresh.</p>'; return; }
     if(products.length===0){
       grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--text-3);" id="empty-products"><p style="font-size:16px;margin-bottom:8px;font-weight:300;">No products available yet.</p><p style="font-size:13px;font-weight:300;">Check back soon for exciting new arrivals!</p></div>';
       return;
     }
-    // sort newest first
-    products.sort((a,b)=>b.id-a.id);
     grid.innerHTML=products.map((p,idx)=>`
       <article class="product-card reveal" style="transition-delay:${Math.min(idx*0.1,0.4)}s">
         <div class="product-img-wrap">
-          ${p.image ? `<img src="${sanitize(p.image)}" alt="${sanitize(p.name)}">` : '<span class="no-img">No Image</span>'}
+          ${p.mediaData ? (p.mediaType && p.mediaType.startsWith('video/') ? `<video controls preload="metadata" src="${sanitize(p.mediaData)}" aria-label="${sanitize(p.name)}"></video>` : `<img src="${sanitize(p.mediaData)}" alt="${sanitize(p.name)}">`) : '<span class="no-img">No Media</span>'}
         </div>
         <div class="product-body">
           <h3>${sanitize(p.name)}</h3>
-          <p>${sanitize(p.desc)}</p>
+          <p>${sanitize(p.description)}</p>
           <div class="price">$${sanitize(p.price)}</div>
-          <div class="date">Added ${p.created}</div>
+          <div class="date">Added ${new Date(p.createdAt).toLocaleDateString()}</div>
         </div>
       </article>
     `).join('');
@@ -1181,37 +1204,34 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   }
 
   async function renderManageList(){
-    const products = await db.getAll('products');
     const container=$('manage-list');
+    let products=[]; try { products=(await api('/products')).products || []; } catch(err) { container.innerHTML='<p style="color:var(--error);">Unable to load products.</p>'; return; }
     if(products.length===0){ container.innerHTML='<p style="color:var(--text-3);text-align:center;padding:48px 20px;font-weight:300;">No products uploaded yet.</p>'; return; }
-    products.sort((a,b)=>b.id-a.id);
     container.innerHTML='<table class="data-table"><thead><tr><th>Name</th><th>Price</th><th>Date</th><th style="width:80px;">Action</th></tr></thead><tbody>'+
-      products.map(p=>`<tr><td>${sanitize(p.name)}</td><td>$${sanitize(p.price)}</td><td>${p.created}</td><td><button type="button" class="btn btn-danger btn-sm delete-product-btn" data-id="${p.id}">Delete</button></td></tr>`).join('')+
+      products.map(p=>`<tr><td>${sanitize(p.name)}</td><td>$${sanitize(p.price)}</td><td>${new Date(p.createdAt).toLocaleDateString()}</td><td><button type="button" class="btn btn-danger btn-sm delete-product-btn" data-id="${p.id}">Delete</button></td></tr>`).join('')+
       '</tbody></table>';
   }
 
   window.deleteProduct = async function(id){
     if(!isOwner) { toast('Unauthorized','err'); return; }
     if(!confirm('Delete this product permanently?')) return;
-    await db.delete('products', id);
+    await api('/products/'+id,{method:'DELETE'});
     renderProducts(); renderManageList(); updateStats();
     toast('Product deleted','ok');
   };
 
   async function renderUsersList(){
-    const users = await db.getAll('users');
     const container=$('users-list');
+    let users=[]; try { users=(await api('/admin/users')).users || []; } catch(err) { container.innerHTML='<p style="color:var(--error);">Unable to load registered users.</p>'; return; }
     if(users.length===0){ container.innerHTML='<p style="color:var(--text-3);text-align:center;padding:48px 20px;font-weight:300;">No registered users yet.</p>'; return; }
     container.innerHTML='<table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Registered</th></tr></thead><tbody>'+
-      users.map(u=>`<tr><td>${sanitize(u.name)}${u.email===OWNER_EMAIL?' <span style="color:var(--accent);font-size:10px;">(OWNER)</span>':''}</td><td>${sanitize(u.email)}</td><td>${sanitize(u.phone)}</td><td>${u.registered}</td></tr>`).join('')+
+      users.map(u=>`<tr><td>${sanitize(u.name)}${u.email===OWNER_EMAIL?' <span style="color:var(--accent);font-size:10px;">(OWNER)</span>':''}</td><td>${sanitize(u.email)}</td><td>${sanitize(u.phone || '')}</td><td>${new Date(u.createdAt).toLocaleString()}</td></tr>`).join('')+
       '</tbody></table>';
   }
 
   async function updateStats(){
-    const products = await db.getAll('products');
-    const users = await db.getAll('users');
+    let products=[]; try { products=(await api('/products')).products || []; } catch(e) { return; }
     $('stat-products').textContent = products.length;
-    $('stat-users').textContent = users.length;
   }
 
   // ========================
@@ -1268,7 +1288,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   }
 
   async function generateBotReply(text, cfg){
-    const products = await db.getAll('products');
+    let products=[];
+    try { products=(await api('/products')).products || []; } catch(e) { products=[]; }
     const p = cfg.personality;
     const tones = {
       friendly: ["Hey there! ", "Sure thing! ", "Absolutely! ", "I'd love to help! "],
@@ -1392,6 +1413,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     $('nav-logout-btn').addEventListener('click', logout);
     $('btn-open-google').addEventListener('click', openGoogle);
     $('btn-open-chrome').addEventListener('click', openChrome);
+    $('google-login-btn').addEventListener('click', googleSignIn);
     $('login-close-btn').addEventListener('click', ()=>closeModal('login-modal'));
     $('admin-close-btn').addEventListener('click', ()=>closeModal('admin-modal'));
     $('admin-verify-btn').addEventListener('click', verifyAdmin);
@@ -1456,21 +1478,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     await db.init();
     await migrateLegacy();
 
-    // Restore session
-    const sess = sessionStorage.getItem('bossy_session');
-    if(sess){
-      try{
-        const userId = Number(sess);
-        if(Number.isFinite(userId)){
-          const user = await db.get('users', userId);
-          if(user) currentUser = user;
-        }
-      }catch(e){ console.warn('Session restore failed', e); }
+    // Restore a server-verified session. Invalid or expired tokens are discarded.
+    if(sessionStorage.getItem('bossy_token')){
+      try { currentUser = (await api('/auth/me')).user; }
+      catch(e) { sessionStorage.removeItem('bossy_token'); }
     }
     updateAuthUI();
     await renderProducts();
     await updateStats();
     bindUI();
+    await initializeGoogleSignIn();
     observeReveals();
 
     // Load chat history
@@ -1505,7 +1522,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 })();
 </script>
 
-<script src="/config.js"></script>
-<script src="/app.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="window.initializeGoogleSignIn && window.initializeGoogleSignIn()"></script>
+
 </body>
 </html>
