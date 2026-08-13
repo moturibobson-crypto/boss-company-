@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Bossy Company — Premium products and services. Explore our catalog, chat with our AI assistant, and join our community.">
+<title>Bossy Company | Official Website</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+:root {
+  --bg:#050508; --bg-2:#0a0a10; --bg-3:#111118;
+  --surface:rgba(255,255,255,0.025); --surface-hover:rgba(255,255,255,0.055);
+  --text:#f0f0f5; --text-2:#a0a0b0; --text-3:#606070;
+  --accent:#8b7fd4; --accent-2:#c4a8d8; --accent-3:#d4af37;
+  --success:#4ade80; --warning:#fbbf24; --error:#f87171;
+  --glow:rgba(139,127,212,0.2); --radius:20px; --radius-sm:12px;
+  --transition:0.4s cubic-bezier(0.16,1,0.3,1);
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Inter',system-ui,sans-serif;
+}
+
+html { scroll-behavior:smooth; }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;} }
+
+body {
+  font-family:var(--font-body); background:var(--bg); color:var(--text);
+  line-height:1.6; overflow-x:hidden; min-height:100vh; font-weight:400;
+}
+
+body::before {
+  content:''; position:fixed; inset:0; z-index:-3; pointer-events:none; opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat; background-size:256px;
+}
+
+body::after {
+  content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(139,127,212,0.07), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(196,168,216,0.05), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(212,175,55,0.04), transparent 50%);
+}
+
+.container { width:100%; max-width:1200px; margin:0 auto; padding:0 28px; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.hidden { display:none !important; }
+
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:10px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,0.18); }
+
+#load-screen {
+  position:fixed; inset:0; background:var(--bg); z-index:99999;
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px;
+  transition:opacity 0.8s ease, visibility 0.8s ease;
+}
+#load-screen.done { opacity:0; visibility:hidden; pointer-events:none; }
+.load-logo {
+  font-family:var(--font-display); font-size:32px; font-weight:600; letter-spacing:2px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2),var(--accent-3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  animation:loadPulse 2s ease-in-out infinite;
+}
+.load-bar { width:120px; height:1px; background:rgba(255,255,255,0.08); position:relative; overflow:hidden; border-radius:2px; }
+.load-bar::after {
+  content:''; position:absolute; left:-50%; top:0; width:50%; height:100%;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  animation:loadSlide 1.5s ease-in-out infinite;
+}
+@keyframes loadSlide { 0%{left:-50%;} 100%{left:100%;} }
+@keyframes loadPulse { 0%,100%{opacity:0.6;} 50%{opacity:1;} }
+
+.site-header {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  background:rgba(5,5,8,0.75); backdrop-filter:blur(24px) saturate(1.2);
+  border-bottom:1px solid rgba(255,255,255,0.04); transition:var(--transition);
+}
+.header-grid { display:flex; align-items:center; justify-content:space-between; height:76px; }
+.logo {
+  font-family:var(--font-display); font-size:26px; font-weight:600; letter-spacing:1px; text-decoration:none;
+  background:linear-gradient(var(--gradient-angle),var(--accent),var(--accent-2),var(--accent-3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  animation:gradientRotate 8s linear infinite;
+  position:relative;
+}
+.logo::after {
+  content:''; position:absolute; bottom:-2px; left:0; width:0; height:1px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-3)); transition:width 0.6s ease;
+}
+.logo:hover::after { width:100%; }
+@keyframes gradientRotate { 0%{--gradient-angle:0deg;} 100%{--gradient-angle:360deg;} }
+
+.nav-links { display:flex; gap:36px; align-items:center; }
+.nav-links a, .nav-links button {
+  color:var(--text-2); text-decoration:none; font-size:13px; font-weight:500; letter-spacing:0.5px;
+  background:none; border:none; cursor:pointer; transition:var(--transition); position:relative; text-transform:uppercase;
+}
+.nav-links a:hover, .nav-links button:hover { color:var(--text); }
+.nav-links a::after, .nav-links button::after {
+  content:''; position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); width:0; height:1px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-3)); transition:width 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.nav-links a:hover::after, .nav-links button:hover::after { width:100%; }
+
+.nav-toggle { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px; }
+.nav-toggle span { display:block; width:22px; height:1.5px; background:var(--text); border-radius:2px; transition:var(--transition); }
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+
+@media(max-width:768px){
+  .nav-toggle{display:flex;}
+  .nav-links{position:fixed;top:76px;left:0;right:0;bottom:0;background:rgba(5,5,8,0.98);backdrop-filter:blur(30px);flex-direction:column;justify-content:center;gap:32px;transform:translateY(-100%);opacity:0;transition:transform 0.5s cubic-bezier(0.16,1,0.3,1),opacity 0.4s ease;pointer-events:none;}
+  .nav-links.open{transform:translateY(0);opacity:1;pointer-events:all;}
+  .nav-links a,.nav-links button{font-size:15px;letter-spacing:1px;}
+}
+
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  padding:14px 28px; border-radius:var(--radius-sm); font-size:13px; font-weight:600; letter-spacing:0.5px;
+  text-decoration:none; cursor:pointer; border:none; transition:var(--transition); position:relative; overflow:hidden;
+  text-transform:uppercase;
+}
+.btn::before {
+  content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  transform:translateX(-100%); transition:transform 0.6s ease;
+}
+.btn:hover::before { transform:translateX(100%); }
+.btn-primary {
+  background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff;
+  box-shadow:0 8px 32px var(--glow);
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 16px 48px var(--glow); filter:brightness(1.08); }
+.btn-secondary { background:var(--surface); color:var(--text); border:1px solid rgba(255,255,255,0.06); }
+.btn-secondary:hover { background:var(--surface-hover); border-color:rgba(255,255,255,0.12); transform:translateY(-2px); }
+.btn-danger { background:rgba(239,68,68,0.1); color:var(--error); border:1px solid rgba(239,68,68,0.25); }
+.btn-danger:hover { background:rgba(239,68,68,0.2); }
+.btn-sm { padding:10px 20px; font-size:12px; }
+.btn:disabled { opacity:0.4; cursor:not-allowed; transform:none !important; }
+
+.hero { padding:170px 0 100px; position:relative; overflow:hidden; }
+.hero-grid { display:grid; grid-template-columns:1.1fr 0.9fr; gap:80px; align-items:center; }
+@media(max-width:900px){ .hero-grid{grid-template-columns:1fr;gap:56px;} }
+
+.hero-eyebrow {
+  display:inline-block; font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase;
+  color:var(--accent-3); margin-bottom:24px; background:rgba(212,175,55,0.08); padding:8px 20px; border-radius:100px;
+  border:1px solid rgba(212,175,55,0.15); opacity:0; transform:translateY(20px);
+  animation:fadeUp 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero h1 {
+  font-family:var(--font-display); font-size:clamp(40px,5.5vw,72px); font-weight:600; line-height:1.05;
+  letter-spacing:-1px; margin-bottom:24px; opacity:0; transform:translateY(30px);
+  animation:fadeUp 0.9s 0.35s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero h1 span {
+  background:linear-gradient(135deg,var(--accent),var(--accent-2),var(--accent-3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-style:italic;
+}
+.hero > .container > .hero-grid > div:first-child > p {
+  font-size:17px; color:var(--text-2); max-width:480px; margin-bottom:40px; line-height:1.7; font-weight:300;
+  opacity:0; transform:translateY(20px); animation:fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-actions {
+  display:flex; gap:16px; flex-wrap:wrap; opacity:0; transform:translateY(20px);
+  animation:fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+.hero-visual { position:relative; display:flex; flex-direction:column; gap:24px; perspective:1000px; }
+
+.glass-card {
+  background:linear-gradient(145deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius);
+  padding:32px; backdrop-filter:blur(20px); transition:var(--transition); position:relative; overflow:hidden;
+  opacity:0; transform:translateY(40px) rotateX(5deg);
+  animation:cardEnter 1s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.glass-card:nth-child(2) { animation-delay:0.7s; }
+.glass-card::before {
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent); transition:left 0.8s ease;
+}
+.glass-card:hover::before { left:100%; }
+.glass-card:hover { border-color:rgba(139,127,212,0.2); transform:translateY(-4px) rotateX(0deg); box-shadow:0 24px 60px rgba(0,0,0,0.4); }
+.stat-card {
+  flex:1; min-width:80px; text-align:center; padding:20px 10px;
+  background:rgba(255,255,255,0.02); border-radius:14px;
+  border:1px solid rgba(255,255,255,0.04); transition:var(--transition);
+}
+.stat-card:hover { border-color:rgba(139,127,212,0.2); transform:translateY(-2px); }
+.glass-card strong { display:block; font-size:11px; color:var(--text-3); margin-bottom:20px; letter-spacing:2px; text-transform:uppercase; font-weight:600; }
+
+@keyframes cardEnter { to { opacity:1; transform:translateY(0) rotateX(0deg); } }
+
+.section { padding:120px 0; position:relative; }
+@media(max-width:640px){ .section{padding:80px 0;} }
+.section-header { text-align:center; max-width:600px; margin:0 auto 64px; }
+.section-header h2 { font-family:var(--font-display); font-size:clamp(30px,3.5vw,44px); font-weight:600; margin-top:16px; letter-spacing:-0.5px; }
+
+.products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:28px; }
+.product-card {
+  background:var(--surface); border:1px solid rgba(255,255,255,0.04); border-radius:var(--radius);
+  overflow:hidden; transition:var(--transition); position:relative; opacity:0; transform:translateY(30px);
+}
+.product-card.visible { opacity:1; transform:translateY(0); }
+.product-card:hover { transform:translateY(-8px); border-color:rgba(139,127,212,0.2); box-shadow:0 28px 60px rgba(0,0,0,0.5); }
+.product-img-wrap { width:100%; height:220px; overflow:hidden; background:var(--bg-2); display:flex; align-items:center; justify-content:center; position:relative; }
+.product-img-wrap::after {
+  content:''; position:absolute; inset:0; background:linear-gradient(to top,rgba(5,5,8,0.6),transparent 50%);
+  opacity:0; transition:opacity 0.4s ease;
+}
+.product-card:hover .product-img-wrap::after { opacity:1; }
+.product-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.product-card:hover .product-img-wrap img { transform:scale(1.1); }
+.product-img-wrap .no-img { color:var(--text-3); font-size:13px; letter-spacing:1px; }
+.product-body { padding:28px; }
+.product-body h3 { font-family:var(--font-display); font-size:19px; font-weight:600; margin-bottom:10px; }
+.product-body p { color:var(--text-2); font-size:14px; line-height:1.7; margin-bottom:14px; font-weight:300; }
+.product-body .price { font-size:22px; font-weight:700; color:var(--accent-3); font-family:var(--font-display); }
+.product-body .date { font-size:11px; color:var(--text-3); margin-top:10px; letter-spacing:0.5px; }
+
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:100px; align-items:center; }
+@media(max-width:900px){ .about-grid{grid-template-columns:1fr;gap:56px;} }
+.about-grid h2 { font-family:var(--font-display); font-size:clamp(28px,3vw,38px); font-weight:600; margin:16px 0 20px; }
+.about-grid p { color:var(--text-2); font-size:16px; margin-bottom:28px; line-height:1.8; font-weight:300; }
+.about-list { list-style:none; display:flex; flex-direction:column; gap:16px; }
+.about-list li { display:flex; align-items:flex-start; gap:14px; color:var(--text-2); font-size:15px; font-weight:300; }
+.about-list li::before {
+  content:''; flex-shrink:0; width:22px; height:22px; background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-weight:700; margin-top:2px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:center;
+}
+.about-visual { display:flex; justify-content:center; }
+.about-box {
+  background:linear-gradient(145deg,rgba(139,127,212,0.08),rgba(196,168,216,0.04)); border:1px solid rgba(139,127,212,0.15);
+  border-radius:var(--radius); padding:48px; max-width:400px; text-align:center; box-shadow:0 24px 80px rgba(139,127,212,0.08);
+  position:relative; overflow:hidden; opacity:0; transform:scale(0.95);
+  transition:var(--transition);
+}
+.about-box.visible { opacity:1; transform:scale(1); }
+.about-box::before {
+  content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+  background:radial-gradient(circle,rgba(139,127,212,0.08),transparent 70%);
+  animation:rotateGlow 10s linear infinite;
+}
+@keyframes rotateGlow { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+.about-box > * { position:relative; z-index:1; }
+.about-box span { display:inline-block; font-size:10px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--accent-3); margin-bottom:20px; background:rgba(212,175,55,0.1); padding:8px 18px; border-radius:100px; }
+.about-box p { color:var(--text-2); font-size:14px; line-height:1.8; margin:0; font-weight:300; }
+
+.register-section { padding:120px 0; }
+.register-card {
+  background:linear-gradient(145deg,rgba(139,127,212,0.05),rgba(196,168,216,0.03)); border:1px solid rgba(255,255,255,0.05);
+  border-radius:var(--radius); padding:64px; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;
+  position:relative; overflow:hidden;
+}
+.register-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent); opacity:0.3;
+}
+@media(max-width:900px){ .register-card{grid-template-columns:1fr;padding:40px 28px;} }
+.register-card h2 { font-family:var(--font-display); font-size:clamp(26px,2.5vw,34px); font-weight:600; margin:16px 0 16px; }
+.register-card p { color:var(--text-2); font-weight:300; line-height:1.7; }
+.form-group { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+.form-group label { font-size:12px; font-weight:600; color:var(--text-3); letter-spacing:1px; text-transform:uppercase; }
+.form-group input, .form-group textarea, .form-group select {
+  padding:16px 20px; border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02); color:var(--text); font-size:15px; outline:none; transition:var(--transition); width:100%; font-family:var(--font-body);
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba(139,127,212,0.1); background:rgba(255,255,255,0.03); }
+.form-group input::placeholder, .form-group textarea::placeholder { color:rgba(160,160,176,0.35); }
+.form-group textarea { min-height:120px; resize:vertical; }
+.form-msg { font-size:13px; font-weight:600; min-height:20px; margin-top:4px; }
+.form-msg.ok { color:var(--success); }
+.form-msg.err { color:var(--error); }
+
+.site-footer { border-top:1px solid rgba(255,255,255,0.04); padding:40px 0; background:rgba(5,5,8,0.6); }
+.footer-grid { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-3); letter-spacing:0.5px; }
+@media(max-width:640px){ .footer-grid{flex-direction:column;gap:12px;text-align:center;} }
+
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:5000;
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  opacity:0; pointer-events:none; transition:opacity 0.4s cubic-bezier(0.16,1,0.3,1);
+  backdrop-filter:blur(8px);
+}
+.modal-overlay.active { opacity:1; pointer-events:all; }
+.modal-box {
+  background:var(--bg-2); border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius);
+  padding:40px; max-width:520px; width:100%; max-height:85vh; overflow-y:auto;
+  box-shadow:0 40px 100px rgba(0,0,0,0.7); transform:translateY(30px) scale(0.97); transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.modal-overlay.active .modal-box { transform:translateY(0) scale(1); }
+.modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
+.modal-header h3 { font-family:var(--font-display); font-size:24px; font-weight:600; }
+.modal-close { background:none; border:none; color:var(--text-3); font-size:24px; cursor:pointer; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:var(--transition); }
+.modal-close:hover { background:rgba(255,255,255,0.04); color:var(--error); transform:rotate(90deg); }
+
+.admin-tabs { display:flex; gap:10px; margin-bottom:28px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:14px; flex-wrap:wrap; }
+.admin-tab {
+  padding:10px 22px; border-radius:var(--radius-sm); font-size:12px; font-weight:600; letter-spacing:0.5px;
+  background:none; border:none; color:var(--text-3); cursor:pointer; transition:var(--transition); text-transform:uppercase;
+}
+.admin-tab:hover { color:var(--text); background:rgba(255,255,255,0.03); }
+.admin-tab.active { color:var(--accent); background:rgba(139,127,212,0.1); border:1px solid rgba(139,127,212,0.15); }
+.admin-panel { display:none; }
+.admin-panel.active { display:block; }
+.data-table { width:100%; border-collapse:collapse; font-size:13px; }
+.data-table th, .data-table td { padding:14px 18px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.04); }
+.data-table th { color:var(--text-3); font-weight:600; font-size:10px; text-transform:uppercase; letter-spacing:1.5px; }
+.data-table td { color:var(--text); font-weight:300; }
+.data-table tr { transition:background 0.2s ease; }
+.data-table tr:hover td { background:rgba(255,255,255,0.02); }
+.upload-preview { width:100%; max-height:220px; object-fit:cover; border-radius:var(--radius-sm); margin-top:14px; border:1px solid rgba(255,255,255,0.06); }
+
+.chat-widget { position:fixed; bottom:28px; right:28px; z-index:4000; }
+.chat-toggle {
+  width:64px; height:64px; border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2)); border:none; color:#fff;
+  font-size:22px; cursor:pointer; box-shadow:0 8px 40px var(--glow);
+  display:flex; align-items:center; justify-content:center; transition:var(--transition); position:relative;
+}
+.chat-toggle:hover { transform:scale(1.08) rotate(-5deg); box-shadow:0 12px 48px var(--glow); }
+.chat-toggle .badge {
+  position:absolute; top:-2px; right:-2px; width:22px; height:22px; background:var(--error);
+  border-radius:50%; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  border:2px solid var(--bg); display:none;
+}
+.chat-toggle .badge.show { display:flex; }
+.chat-window {
+  position:absolute; bottom:84px; right:0; width:400px; max-height:560px;
+  background:var(--bg-2); border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius);
+  box-shadow:0 24px 80px rgba(0,0,0,0.7); display:flex; flex-direction:column;
+  overflow:hidden; opacity:0; transform:translateY(20px) scale(0.96); pointer-events:none;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+@media(max-width:480px){ .chat-window{width:calc(100vw - 56px);max-height:65vh;} }
+.chat-window.open { opacity:1; transform:translateY(0) scale(1); pointer-events:all; }
+.chat-header {
+  padding:18px 22px; background:linear-gradient(135deg,rgba(139,127,212,0.12),rgba(196,168,216,0.06));
+  border-bottom:1px solid rgba(255,255,255,0.04); display:flex; align-items:center; gap:14px;
+}
+.chat-header .avatar {
+  width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; font-family:var(--font-display);
+}
+.chat-header .info { flex:1; }
+.chat-header .info strong { font-size:14px; display:block; font-weight:600; }
+.chat-header .info span { font-size:11px; color:var(--success); font-weight:500; }
+.chat-header .info span::before { content:'● '; font-size:8px; vertical-align:middle; }
+.chat-header .close-chat {
+  background:none; border:none; color:var(--text-3); font-size:20px; cursor:pointer; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:var(--transition);
+}
+.chat-header .close-chat:hover { background:rgba(255,255,255,0.04); color:var(--text); transform:rotate(90deg); }
+.chat-body { flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:14px; min-height:300px; }
+.chat-body::-webkit-scrollbar { width:4px; }
+.chat-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:4px; }
+.chat-msg { display:flex; gap:12px; max-width:88%; animation:msgPop 0.3s cubic-bezier(0.16,1,0.3,1); }
+@keyframes msgPop { from{opacity:0;transform:translateY(10px) scale(0.95);} to{opacity:1;transform:translateY(0) scale(1);} }
+.chat-msg.bot { align-self:flex-start; }
+.chat-msg.user { align-self:flex-end; flex-direction:row-reverse; }
+.chat-msg .bubble {
+  padding:12px 16px; border-radius:16px; font-size:13px; line-height:1.6;
+  background:var(--surface); border:1px solid rgba(255,255,255,0.05); color:var(--text); font-weight:300;
+}
+.chat-msg.user .bubble { background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; border:none; font-weight:400; }
+.chat-msg .time { font-size:10px; color:var(--text-3); margin-top:6px; letter-spacing:0.5px; }
+.chat-msg.bot .avatar-small {
+  width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; font-family:var(--font-display);
+}
+.chat-typing { display:flex; gap:5px; padding:12px 16px; background:var(--surface); border-radius:16px; width:fit-content; }
+.chat-typing span { width:6px; height:6px; background:var(--text-3); border-radius:50%; animation:typing 1.4s infinite ease-in-out both; }
+.chat-typing span:nth-child(1){animation-delay:-0.32s;}
+.chat-typing span:nth-child(2){animation-delay:-0.16s;}
+@keyframes typing{0%,80%,100%{transform:scale(0);}40%{transform:scale(1);}}
+.chat-footer { padding:14px 18px; border-top:1px solid rgba(255,255,255,0.04); display:flex; gap:10px; }
+.chat-footer input {
+  flex:1; padding:12px 18px; border-radius:100px; border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02); color:var(--text); font-size:13px; outline:none; transition:var(--transition); font-family:var(--font-body);
+}
+.chat-footer input:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba(139,127,212,0.08); }
+.chat-footer input::placeholder { color:var(--text-3); }
+.chat-footer button {
+  width:42px; height:42px; border-radius:50%; border:none; background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:var(--transition); flex-shrink:0;
+}
+.chat-footer button:hover { transform:scale(1.1) rotate(-10deg); }
+.owner-controls {
+  padding:12px 18px; background:rgba(139,127,212,0.06); border-top:1px solid rgba(255,255,255,0.04);
+  display:none; gap:10px; flex-wrap:wrap; align-items:center;
+}
+.owner-controls.show { display:flex; }
+.owner-controls label { font-size:11px; color:var(--text-2); font-weight:600; letter-spacing:0.5px; }
+.owner-controls input {
+  flex:1; padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);
+  background:var(--bg-3); color:var(--text); font-size:12px; outline:none; font-family:var(--font-body);
+}
+
+.reveal { opacity:0; transform:translateY(40px); transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+.stagger-1 { transition-delay:0.1s; }
+.stagger-2 { transition-delay:0.2s; }
+.stagger-3 { transition-delay:0.3s; }
+
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+.hero-visual { animation:float 7s ease-in-out infinite; }
+
+.toast {
+  position:fixed; top:100px; right:28px; padding:16px 24px; border-radius:var(--radius-sm);
+  font-size:13px; font-weight:600; z-index:6000; animation:toastIn 0.5s cubic-bezier(0.16,1,0.3,1), toastOut 0.5s cubic-bezier(0.16,1,0.3,1) 3.5s forwards;
+  max-width:340px; box-shadow:0 12px 40px rgba(0,0,0,0.5); backdrop-filter:blur(20px); border:1px solid;
+  letter-spacing:0.3px;
+}
+@keyframes toastIn{from{transform:translateX(120%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes toastOut{from{transform:translateX(0);opacity:1;}to{transform:translateX(120%);opacity:0;}}
+.toast.ok { background:rgba(74,222,128,0.08); border-color:rgba(74,222,128,0.2); color:var(--success); }
+.toast.err { background:rgba(248,113,113,0.08); border-color:rgba(248,113,113,0.2); color:var(--error); }
+.toast.info { background:rgba(139,127,212,0.08); border-color:rgba(139,127,212,0.2); color:var(--accent); }
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline:2px solid var(--accent); outline-offset:3px;
+}
+
+.security-notice {
+  position:fixed; bottom:28px; left:28px; z-index:3000;
+  background:rgba(5,5,8,0.9); border:1px solid rgba(74,222,128,0.15); border-radius:var(--radius-sm);
+  padding:12px 18px; font-size:11px; color:var(--success); backdrop-filter:blur(12px);
+  display:flex; align-items:center; gap:10px; opacity:0; transform:translateY(20px);
+  animation:secNoticeIn 0.6s 1.5s cubic-bezier(0.16,1,0.3,1) forwards, secNoticeOut 0.6s 8s cubic-bezier(0.16,1,0.3,1) forwards;
+  max-width:280px;
+}
+@keyframes secNoticeIn { to{opacity:1;transform:translateY(0);} }
+@keyframes secNoticeOut { to{opacity:0;transform:translateY(20px);} }
+.security-notice svg { width:16px; height:16px; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<div id="load-screen">
+  <div class="load-logo">Bossy Company</div>
+  <div class="load-bar"></div>
+</div>
+
+<div class="security-notice" id="sec-notice">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+  <span>Secure local storage. Data never leaves your device.</span>
+</div>
+
+<header class="site-header">
+  <div class="container header-grid">
+    <a class="logo" href="#home">Bossy Company</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="main-nav" aria-label="Main navigation">
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="#register">Join</a>
+      <button id="nav-admin-btn" class="hidden">Admin</button>
+      <button id="nav-login-btn">Sign In</button>
+      <button id="nav-logout-btn" class="hidden">Logout</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div>
+        <span class="hero-eyebrow">Welcome to Bossy Company</span>
+        <h1>Experience <span>Excellence.</span></h1>
+        <p>Discover premium products, exceptional services, and a community built around quality. Join thousands who trust Bossy Company.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#products">Explore Products</a>
+          <a class="btn btn-secondary" href="#register">Join Now</a>
+          <button type="button" id="btn-open-google" class="btn btn-secondary">Search Google</button>
+          <button type="button" id="btn-open-chrome" class="btn btn-secondary">Open Chrome</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="glass-card">
+          <strong>Company Highlights</strong>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <div class="stat-card">
+              <span style="font-size:32px;font-weight:700;display:block;color:var(--accent);font-family:var(--font-display);" id="stat-products">0</span>
+              <small style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;">Products</small>
+            </div>
+            <div class="stat-card">
+              <span style="font-size:32px;font-weight:700;display:block;color:var(--accent-2);font-family:var(--font-display);" id="stat-users">0</span>
+              <small style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;">Members</small>
+            </div>
+            <div class="stat-card">
+              <span style="font-size:32px;font-weight:700;display:block;color:var(--accent-3);font-family:var(--font-display);">24/7</span>
+              <small style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;">Support</small>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card">
+          <p style="color:var(--text-2);font-size:14px;line-height:1.8;margin:0;font-weight:300;"><strong style="color:var(--text);font-weight:600;">AI-Powered Assistance</strong><br>Our intelligent bot is always online to guide you through products, answer questions, and help you find exactly what you need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="products">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="hero-eyebrow" style="animation:none;opacity:1;transform:none;">Our Collection</span>
+        <h2>Featured Products & Services</h2>
+      </div>
+      <div class="products-grid" id="products-grid">
+        <div style="grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--text-3);" id="empty-products">
+          <p style="font-size:16px;margin-bottom:8px;font-weight:300;">No products available yet.</p>
+          <p style="font-size:13px;font-weight:300;">Check back soon for exciting new arrivals!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container about-grid">
+      <div class="reveal">
+        <span class="hero-eyebrow" style="animation:none;opacity:1;transform:none;">About Us</span>
+        <h2>Built on trust.<br>Driven by quality.</h2>
+        <p>Bossy Company was founded with a simple mission: deliver outstanding products and services that make a real difference in people's lives. We believe in transparency, innovation, and putting our customers first.</p>
+        <ul class="about-list">
+          <li>Premium quality guaranteed on every product</li>
+          <li>24/7 customer support with AI assistance</li>
+          <li>Community-driven development and feedback</li>
+          <li>Secure, private, and transparent operations</li>
+        </ul>
+      </div>
+      <div class="about-visual">
+        <div class="about-box reveal">
+          <span>Our Promise</span>
+          <p>We continuously evolve our catalog based on what our community needs. Every product is carefully selected and every service is designed with you in mind.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="register-section" id="register">
+    <div class="container">
+      <div class="register-card reveal">
+        <div>
+          <span class="hero-eyebrow" style="animation:none;opacity:1;transform:none;">Join the Community</span>
+          <h2>Become a member today.</h2>
+          <p>Register to get exclusive access to new products, special offers, and personalized recommendations from our AI assistant.</p>
+        </div>
+        <form id="register-form">
+          <div class="form-group">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" placeholder="John Doe" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="reg-phone">Phone Number</label>
+            <input type="tel" id="reg-phone" placeholder="+1 234 567 890" required autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" placeholder="Create a password" required autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+          <p class="form-msg" id="reg-msg"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <p>&copy; 2026 Bossy Company. All rights reserved.</p>
+    <p>Crafted with excellence.</p>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="login-modal">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <div class="modal-header">
+      <h3 id="login-title">Sign In</h3>
+      <button class="modal-close" id="login-close-btn" aria-label="Close">&times;</button>
+    </div>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" placeholder="Your password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+      <p class="form-msg" id="login-msg"></p>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="admin-modal">
+  <div class="modal-box" style="max-width:840px;" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+    <div class="modal-header">
+      <h3 id="admin-title">Owner Dashboard</h3>
+      <button class="modal-close" id="admin-close-btn" aria-label="Close">&times;</button>
+    </div>
+    <div id="admin-auth-gate" class="hidden">
+      <p style="color:var(--text-2);margin-bottom:12px;font-size:14px;line-height:1.7;font-weight:300;">This area is restricted to the registered owner. Please authenticate to continue.</p>
+      <p style="color:var(--text-3);margin-bottom:20px;font-size:12px;line-height:1.6;">Default owner password is <strong>boby2026</strong> until changed in Security settings.</p>
+      <div class="form-group">
+        <label for="admin-password">Owner Password</label>
+        <input type="password" id="admin-password" placeholder="Enter owner password">
+      </div>
+      <button class="btn btn-primary" id="admin-verify-btn">Access Dashboard</button>
+      <p class="form-msg" id="admin-auth-msg"></p>
+      <p style="font-size:11px;color:var(--text-3);margin-top:16px;line-height:1.6;">Protected area. Unauthorized access attempts are logged locally.</p>
+    </div>
+    <div id="admin-panels" class="hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+        <p style="font-size:12px;color:var(--text-3);letter-spacing:0.5px;">Logged in as <strong style="color:var(--accent);">moturibobson@gmail.com</strong></p>
+        <button class="btn btn-secondary btn-sm" id="admin-signout-btn">Sign Out</button>
+      </div>
+      <div class="admin-tabs" id="admin-tabs">
+        <button class="admin-tab active" type="button" data-tab="upload">Upload Product</button>
+        <button class="admin-tab" type="button" data-tab="manage">Manage Products</button>
+        <button class="admin-tab" type="button" data-tab="users">Registered Users</button>
+        <button class="admin-tab" type="button" data-tab="bot">Bot Control</button>
+        <button class="admin-tab" type="button" data-tab="security">Security</button>
+      </div>
+      <div class="admin-panel active" id="panel-upload">
+        <form id="upload-form">
+          <div class="form-group">
+            <label for="up-name">Product Name</label>
+            <input type="text" id="up-name" placeholder="e.g. Premium Wireless Headphones" required>
+          </div>
+          <div class="form-group">
+            <label for="up-desc">Description</label>
+            <textarea id="up-desc" placeholder="Describe the product features..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="up-price">Price (USD)</label>
+            <input type="text" id="up-price" placeholder="e.g. 49.99" required>
+          </div>
+          <div class="form-group">
+            <label for="up-image">Product Image</label>
+            <input type="file" id="up-image" accept="image/*">
+            <img id="up-preview" class="upload-preview hidden" alt="Preview">
+          </div>
+          <button type="submit" class="btn btn-primary">Upload Product</button>
+          <p class="form-msg" id="up-msg"></p>
+        </form>
+      </div>
+      <div class="admin-panel" id="panel-manage">
+        <div id="manage-list" style="max-height:420px;overflow-y:auto;">
+          <p style="color:var(--text-3);text-align:center;padding:48px 20px;font-weight:300;">No products uploaded yet.</p>
+        </div>
+      </div>
+      <div class="admin-panel" id="panel-users">
+        <div id="users-list" style="max-height:420px;overflow-y:auto;">
+          <p style="color:var(--text-3);text-align:center;padding:48px 20px;font-weight:300;">No registered users yet.</p>
+        </div>
+      </div>
+      <div class="admin-panel" id="panel-bot">
+        <div class="form-group">
+          <label for="bot-mode">Bot Mode</label>
+          <select id="bot-mode">
+            <option value="auto">Autonomous</option>
+            <option value="guided">Guided</option>
+            <option value="manual">Manual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="bot-personality">Bot Personality</label>
+          <select id="bot-personality">
+            <option value="friendly">Friendly & Helpful</option>
+            <option value="professional">Professional & Formal</option>
+            <option value="casual">Casual & Relaxed</option>
+            <option value="enthusiastic">Enthusiastic & Energetic</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="bot-custom-msg">Custom Welcome Message</label>
+          <input type="text" id="bot-custom-msg" placeholder="Welcome to Bossy Company! How can I help?">
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+          <button class="btn btn-secondary btn-sm" id="btn-broadcast">Send Broadcast</button>
+          <button class="btn btn-danger btn-sm" id="btn-clear-chat">Clear Chat History</button>
+        </div>
+        <p style="font-size:12px;color:var(--text-3);margin-top:20px;">Current status: <span id="bot-status-display" style="color:var(--success);font-weight:700;">Online</span></p>
+      </div>
+      <div class="admin-panel" id="panel-security">
+        <form id="admin-password-form">
+          <div class="form-group">
+            <label for="admin-current-password">Current Password</label>
+            <input type="password" id="admin-current-password" placeholder="Current owner password">
+          </div>
+          <div class="form-group">
+            <label for="admin-new-password">New Password</label>
+            <input type="password" id="admin-new-password" placeholder="New owner password">
+          </div>
+          <div class="form-group">
+            <label for="admin-confirm-password">Confirm New Password</label>
+            <input type="password" id="admin-confirm-password" placeholder="Confirm new password">
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
+            <button type="submit" class="btn btn-primary">Update Password</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="admin-notify-password-btn">Email Admin Notification</button>
+          </div>
+          <p class="form-msg" id="admin-password-msg"></p>
+          <p style="font-size:12px;color:var(--text-3);margin-top:12px;line-height:1.6;">Changing the owner password will also open your email client with a notification request for the admin to reply with "Agree" or "Disagree." The default owner password is <strong>boby2026</strong> until it is updated.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-widget">
+  <div class="chat-window" id="chat-window" role="dialog" aria-label="Chat with Bossy AI">
+    <div class="chat-header">
+      <div class="avatar">B</div>
+      <div class="info">
+        <strong>Bossy AI</strong>
+        <span>Online</span>
+      </div>
+      <button class="close-chat" id="btn-chat-close" aria-label="Close chat">&times;</button>
+    </div>
+    <div class="chat-body" id="chat-body" aria-live="polite" aria-atomic="false"></div>
+    <div class="owner-controls" id="owner-chat-controls">
+      <label>Owner Reply:</label>
+      <input type="text" id="owner-reply" placeholder="Type owner response...">
+      <button class="btn btn-primary btn-sm" id="btn-owner-send">Send</button>
+      <button class="btn btn-secondary btn-sm" id="btn-bot-auto">Pause Auto</button>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="chat-input" placeholder="Ask me anything..." aria-label="Type your message">
+      <button id="btn-chat-send" aria-label="Send message">&#10148;</button>
+    </div>
+  </div>
+  <button class="chat-toggle" id="btn-chat-toggle" aria-label="Open chat">
+    <span style="font-size:20px;">&#9993;</span>
+    <span class="badge" id="chat-badge">0</span>
+  </button>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  const OWNER_EMAIL = 'moturibobson@gmail.com';
+  const DB_NAME = 'BossyCompanyDB';
+  const DB_VERSION = 1;
+  const LS_MIGRATED = 'bossy_migrated_v1';
+
+  // ========================
+  // INDEXEDDB ENGINE
+  // ========================
+  class BossyDB {
+    constructor() { this.db = null; }
+    async init() {
+      return new Promise((res,rej)=>{
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onerror = ()=>rej(req.error);
+        req.onsuccess = ()=>{ this.db = req.result; res(); };
+        req.onupgradeneeded = (e)=>{
+          const db = e.target.result;
+          if(!db.objectStoreNames.contains('users')) db.createObjectStore('users',{keyPath:'id'});
+          if(!db.objectStoreNames.contains('products')) db.createObjectStore('products',{keyPath:'id'});
+          if(!db.objectStoreNames.contains('chat')) db.createObjectStore('chat',{keyPath:'time'});
+          if(!db.objectStoreNames.contains('config')) db.createObjectStore('config');
+        };
+      });
+    }
+    async getAll(store){
+      return new Promise((res,rej)=>{
+        const tx = this.db.transaction(store,'readonly');
+        const st = tx.objectStore(store);
+        const req = st.getAll();
+        req.onsuccess = ()=>res(req.result||[]);
+        req.onerror = ()=>rej(req.error);
+      });
+    }
+    async get(store, key){
+      return new Promise((res,rej)=>{
+        const tx = this.db.transaction(store,'readonly');
+        const st = tx.objectStore(store);
+        const req = st.get(key);
+        req.onsuccess = ()=>res(req.result||null);
+        req.onerror = ()=>rej(req.error);
+      });
+    }
+    async put(store, data){
+      return new Promise((res,rej)=>{
+        const tx = this.db.transaction(store,'readwrite');
+        const st = tx.objectStore(store);
+        const req = st.put(data);
+        req.onsuccess = ()=>res();
+        req.onerror = ()=>rej(req.error);
+      });
+    }
+    async delete(store, key){
+      return new Promise((res,rej)=>{
+        const tx = this.db.transaction(store,'readwrite');
+        const st = tx.objectStore(store);
+        const req = st.delete(key);
+        req.onsuccess = ()=>res();
+        req.onerror = ()=>rej(req.error);
+      });
+    }
+    async clear(store){
+      return new Promise((res,rej)=>{
+        const tx = this.db.transaction(store,'readwrite');
+        const st = tx.objectStore(store);
+        const req = st.clear();
+        req.onsuccess = ()=>res();
+        req.onerror = ()=>rej(req.error);
+      });
+    }
+    async getConfig(key, def){
+      try{
+        const tx = this.db.transaction('config','readonly');
+        const st = tx.objectStore('config');
+        const req = st.get(key);
+        return new Promise((res)=>{
+          req.onsuccess = ()=>{
+            if(req.result && req.result.value !== undefined) res(req.result.value);
+            else res(def);
+          };
+          req.onerror = ()=>res(def);
+        });
+      }catch(e){ return def; }
+    }
+    async setConfig(key, val){
+      return this.put('config', {id:key, value:val});
+    }
+  }
+
+  const db = new BossyDB();
+
+  // ========================
+  // SECURITY: HASHING
+  // ========================
+  async function sha256(str){
+    const buf = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function sanitize(str){
+    const d = document.createElement('div'); d.textContent = String(str); return d.innerHTML;
+  }
+
+  // ========================
+  // MIGRATION FROM LOCALSTORAGE
+  // ========================
+  async function migrateLegacy(){
+    if(localStorage.getItem(LS_MIGRATED) === 'true') return;
+    const stores = ['bossy_users','bossy_products','bossy_chat','bossy_bot_config'];
+    const map = {bossy_users:'users', bossy_products:'products', bossy_chat:'chat'};
+    for(const lsKey of stores){
+      const raw = localStorage.getItem(lsKey);
+      if(!raw) continue;
+      try{
+        const data = JSON.parse(raw);
+        const storeName = map[lsKey];
+        if(storeName && Array.isArray(data)){
+          for(const item of data){
+            if(storeName==='chat') await db.put('chat', item);
+            else await db.put(storeName, item);
+          }
+        } else if(lsKey==='bossy_bot_config' && typeof data==='object'){
+          await db.setConfig('bot', data);
+        }
+      }catch(e){ console.warn('Migration skip for', lsKey); }
+    }
+    localStorage.setItem(LS_MIGRATED, 'true');
+    toast('Data migrated to secure local storage','ok');
+  }
+
+  // ========================
+  // HELPERS
+  // ========================
+  const $ = (id)=>document.getElementById(id);
+  const now = ()=>new Date().toLocaleString();
+
+  function toast(msg,type){
+    const t = document.createElement('div'); t.className='toast '+type; t.textContent=msg;
+    document.body.appendChild(t); setTimeout(()=>t.remove(),4000);
+  }
+
+  // ========================
+  // STATE
+  // ========================
+  let currentUser = null;
+  let isOwner = false;
+  let botAuto = true;
+  let chatOpen = false;
+  let unreadCount = 0;
+  let pendingUploadFile = null;
+
+  // ========================
+  // AUTH UI
+  // ========================
+  function updateAuthUI(){
+    const loginBtn = $('nav-login-btn');
+    const logoutBtn = $('nav-logout-btn');
+    const adminBtn = $('nav-admin-btn');
+    if(currentUser){
+      loginBtn.classList.add('hidden');
+      logoutBtn.classList.remove('hidden');
+      logoutBtn.textContent = 'Logout ('+sanitize(currentUser.name).split(' ')[0]+')';
+      if(currentUser.email === OWNER_EMAIL){
+        adminBtn.classList.remove('hidden');
+        isOwner = true;
+        showOwnerControls();
+      } else {
+        adminBtn.classList.add('hidden');
+        isOwner = false;
+        hideOwnerControls();
+      }
+    } else {
+      loginBtn.classList.remove('hidden');
+      logoutBtn.classList.add('hidden');
+      adminBtn.classList.add('hidden');
+      isOwner = false;
+      hideOwnerControls();
+    }
+  }
+
+  window.logout = function(){
+    currentUser = null; isOwner = false;
+    sessionStorage.removeItem('bossy_session');
+    try{ closeModal('admin-modal'); }catch(e){}
+    try{ closeModal('login-modal'); }catch(e){}
+    updateAuthUI();
+    toast('Logged out successfully','ok');
+  };
+
+  window.openAdmin = function(){
+    if(!currentUser || currentUser.email !== OWNER_EMAIL){
+      toast('Access denied. Owner only.','err'); return;
+    }
+    openModal('admin-modal');
+    $('admin-auth-gate').classList.add('hidden');
+    $('admin-panels').classList.remove('hidden');
+    renderManageList(); renderUsersList(); loadBotSettings();
+    toast('Welcome, Owner','ok');
+  };
+
+  // ========================
+  // MOBILE NAV
+  // ========================
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = $('main-nav');
+  toggle.addEventListener('click',()=>{
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded',open);
+    document.body.style.overflow = open?'hidden':'';
+  });
+  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+    nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); document.body.style.overflow='';
+  }));
+
+  // ========================
+  // MODALS
+  // ========================
+  window.openModal = function(id){ $(id).classList.add('active'); document.body.style.overflow='hidden'; };
+  window.closeModal = function(id){ $(id).classList.remove('active'); document.body.style.overflow=''; };
+  window.closeModalOnBackdrop = function(e,id){ if(e.target===$(id)) closeModal(id); };
+
+  window.openGoogle = function(){ window.open('https://www.google.com','_blank','noopener'); };
+  window.openChrome = function(){
+    const fallback = 'https://www.google.com';
+    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg|OPR|Brave|SamsungBrowser/.test(navigator.userAgent);
+    if(isChrome){ window.open(fallback,'_blank','noopener'); return; }
+    const link = document.createElement('a');
+    link.href = 'googlechrome://www.google.com'; link.target='_blank'; link.rel='noopener';
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    setTimeout(()=>window.open(fallback,'_blank','noopener'), 500);
+  };
+
+  // ========================
+  // ADMIN AUTH
+  // ========================
+  window.verifyAdmin = async function(){
+    const pass = $('admin-password').value;
+    if(!pass){ $('admin-auth-msg').textContent='Enter password.'; $('admin-auth-msg').className='form-msg err'; return; }
+    if(!currentUser || currentUser.email !== OWNER_EMAIL){
+      $('admin-auth-msg').textContent='Unauthorized.'; $('admin-auth-msg').className='form-msg err'; return;
+    }
+    const storedHash = await db.getConfig('owner_hash', null);
+    const inputHash = await sha256(pass);
+    const defaultHash = await sha256('boby2026');
+    let valid = false;
+    if(storedHash){
+      valid = (inputHash === storedHash);
+    } else if(inputHash === defaultHash){
+      valid = true;
+      await db.setConfig('owner_hash', defaultHash);
+    }
+    if(valid){
+      $('admin-auth-gate').classList.add('hidden');
+      $('admin-panels').classList.remove('hidden');
+      renderManageList(); renderUsersList(); loadBotSettings();
+      toast('Welcome, Owner','ok');
+    } else {
+      $('admin-auth-msg').textContent='Incorrect password.'; $('admin-auth-msg').className='form-msg err';
+    }
+  };
+
+  window.notifyOwnerPasswordChange = function(){
+    const subject = encodeURIComponent('Bossy Company Owner Password Change');
+    const body = encodeURIComponent(
+      'The owner password has been changed.\n\n' +
+      'Please reply with "Agree" if you approve this change, or "Disagree" if you do not.\n\n' +
+      'Change time: ' + now() + '\n\n' +
+      'If you did not authorize this change, please investigate immediately.'
+    );
+    window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
+  };
+
+  window.changeOwnerPassword = async function(e){
+    if(e && e.preventDefault) e.preventDefault();
+    const current = $('admin-current-password').value;
+    const next = $('admin-new-password').value;
+    const confirm = $('admin-confirm-password').value;
+    const msg = $('admin-password-msg');
+    msg.textContent = '';
+    msg.className = 'form-msg';
+    if(!current || !next || !confirm){ msg.textContent='All fields are required.'; msg.className='form-msg err'; return; }
+    if(next.length < 6){ msg.textContent='New password must be at least 6 characters.'; msg.className='form-msg err'; return; }
+    if(next !== confirm){ msg.textContent='Passwords do not match.'; msg.className='form-msg err'; return; }
+    const storedHash = await db.getConfig('owner_hash', null);
+    const currentHash = await sha256(current);
+    const defaultHash = await sha256('boby2026');
+    const validCurrent = storedHash ? currentHash === storedHash : currentHash === defaultHash;
+    if(!validCurrent){ msg.textContent='Current password is incorrect.'; msg.className='form-msg err'; return; }
+    if(current === next){ msg.textContent='New password must differ from current password.'; msg.className='form-msg err'; return; }
+    const newHash = await sha256(next);
+    await db.setConfig('owner_hash', newHash);
+    $('admin-current-password').value='';
+    $('admin-new-password').value='';
+    $('admin-confirm-password').value='';
+    msg.textContent='Owner password updated. Admin notification has been prepared.';
+    msg.className='form-msg ok';
+    toast('Owner password updated; please send the email notification.','ok');
+    notifyOwnerPasswordChange();
+  };
+
+  window.adminLogout = function(){
+    isOwner = false;
+    updateAuthUI();
+    try{ closeModal('admin-modal'); }catch(e){}
+    toast('Admin signed out','ok');
+  };
+
+  window.switchAdminTab = function(tab,btn){
+    document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    $('panel-'+tab).classList.add('active');
+    if(tab==='manage') renderManageList();
+    if(tab==='users') renderUsersList();
+    if(tab==='bot') loadBotSettings();
+  };
+
+  // ========================
+  // REGISTRATION
+  // ========================
+  window.handleRegister = async function(e){
+    e.preventDefault();
+    const name=$('reg-name').value.trim(), email=$('reg-email').value.trim().toLowerCase(),
+          phone=$('reg-phone').value.trim(), pass=$('reg-password').value;
+    if(!name||!email||!phone||!pass){ $('reg-msg').textContent='All fields required.'; $('reg-msg').className='form-msg err'; return; }
+    const users = await db.getAll('users');
+    if(users.find(u=>u.email===email)){ $('reg-msg').textContent='Email already registered.'; $('reg-msg').className='form-msg err'; return; }
+    const hash = await sha256(pass);
+    const newUser = {id:Date.now(),name,email,phone,passwordHash:hash,registered:now(),isOwner:(email===OWNER_EMAIL)};
+    await db.put('users', newUser);
+    $('reg-msg').textContent='Account created! Welcome to Bossy Company.'; $('reg-msg').className='form-msg ok';
+    $('register-form').reset();
+    updateStats();
+    toast('Registration successful!','ok');
+  };
+
+  // ========================
+  // LOGIN
+  // ========================
+  window.handleLogin = async function(e){
+    e.preventDefault();
+    const email=$('login-email').value.trim().toLowerCase(), pass=$('login-password').value;
+    const users = await db.getAll('users');
+    const user = users.find(u=>u.email===email);
+    if(!user){ $('login-msg').textContent='Invalid email or password.'; $('login-msg').className='form-msg err'; return; }
+    const hash = await sha256(pass);
+    if(hash !== user.passwordHash){ $('login-msg').textContent='Invalid email or password.'; $('login-msg').className='form-msg err'; return; }
+    currentUser = user;
+    sessionStorage.setItem('bossy_session', String(user.id));
+    updateAuthUI();
+    closeModal('login-modal');
+    $('login-msg').textContent='';
+    toast('Welcome back, '+sanitize(user.name).split(' ')[0]+'!','ok');
+  };
+
+  // ========================
+  // PRODUCT UPLOAD
+  // ========================
+  window.previewImage = function(input){
+    const file=input.files[0]; if(!file)return;
+    pendingUploadFile = file;
+    const reader=new FileReader();
+    reader.onload=(e)=>{ $('up-preview').src=e.target.result; $('up-preview').classList.remove('hidden'); };
+    reader.readAsDataURL(file);
+  };
+
+  window.handleUpload = async function(e){
+    e.preventDefault();
+    if(!isOwner || !currentUser || currentUser.email !== OWNER_EMAIL){
+      $('up-msg').textContent='Unauthorized.'; $('up-msg').className='form-msg err'; return;
+    }
+    const name=$('up-name').value.trim(), desc=$('up-desc').value.trim(), price=$('up-price').value.trim();
+    if(!name||!desc||!price){ $('up-msg').textContent='All fields required.'; $('up-msg').className='form-msg err'; return; }
+
+    let imageUrl = null;
+    if(pendingUploadFile){
+      imageUrl = $('up-preview').src; // base64 data URL stored locally
+    } else {
+      const img=$('up-preview').src;
+      imageUrl = img && img.startsWith('data:') ? img : null;
+    }
+
+    const product = {id:Date.now(),name,desc,price,image:imageUrl||null,created:now()};
+    await db.put('products', product);
+    $('up-msg').textContent='Product uploaded successfully!'; $('up-msg').className='form-msg ok';
+    e.target.reset(); $('up-preview').classList.add('hidden'); $('up-preview').src='';
+    pendingUploadFile = null;
+    renderProducts(); updateStats(); renderManageList();
+    toast('Product uploaded','ok');
+  };
+
+  async function renderProducts(){
+    const products = await db.getAll('products');
+    const grid=$('products-grid');
+    if(products.length===0){
+      grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--text-3);" id="empty-products"><p style="font-size:16px;margin-bottom:8px;font-weight:300;">No products available yet.</p><p style="font-size:13px;font-weight:300;">Check back soon for exciting new arrivals!</p></div>';
+      return;
+    }
+    // sort newest first
+    products.sort((a,b)=>b.id-a.id);
+    grid.innerHTML=products.map((p,idx)=>`
+      <article class="product-card reveal" style="transition-delay:${Math.min(idx*0.1,0.4)}s">
+        <div class="product-img-wrap">
+          ${p.image ? `<img src="${sanitize(p.image)}" alt="${sanitize(p.name)}">` : '<span class="no-img">No Image</span>'}
+        </div>
+        <div class="product-body">
+          <h3>${sanitize(p.name)}</h3>
+          <p>${sanitize(p.desc)}</p>
+          <div class="price">$${sanitize(p.price)}</div>
+          <div class="date">Added ${p.created}</div>
+        </div>
+      </article>
+    `).join('');
+    observeReveals();
+  }
+
+  async function renderManageList(){
+    const products = await db.getAll('products');
+    const container=$('manage-list');
+    if(products.length===0){ container.innerHTML='<p style="color:var(--text-3);text-align:center;padding:48px 20px;font-weight:300;">No products uploaded yet.</p>'; return; }
+    products.sort((a,b)=>b.id-a.id);
+    container.innerHTML='<table class="data-table"><thead><tr><th>Name</th><th>Price</th><th>Date</th><th style="width:80px;">Action</th></tr></thead><tbody>'+
+      products.map(p=>`<tr><td>${sanitize(p.name)}</td><td>$${sanitize(p.price)}</td><td>${p.created}</td><td><button type="button" class="btn btn-danger btn-sm delete-product-btn" data-id="${p.id}">Delete</button></td></tr>`).join('')+
+      '</tbody></table>';
+  }
+
+  window.deleteProduct = async function(id){
+    if(!isOwner) { toast('Unauthorized','err'); return; }
+    if(!confirm('Delete this product permanently?')) return;
+    await db.delete('products', id);
+    renderProducts(); renderManageList(); updateStats();
+    toast('Product deleted','ok');
+  };
+
+  async function renderUsersList(){
+    const users = await db.getAll('users');
+    const container=$('users-list');
+    if(users.length===0){ container.innerHTML='<p style="color:var(--text-3);text-align:center;padding:48px 20px;font-weight:300;">No registered users yet.</p>'; return; }
+    container.innerHTML='<table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Registered</th></tr></thead><tbody>'+
+      users.map(u=>`<tr><td>${sanitize(u.name)}${u.email===OWNER_EMAIL?' <span style="color:var(--accent);font-size:10px;">(OWNER)</span>':''}</td><td>${sanitize(u.email)}</td><td>${sanitize(u.phone)}</td><td>${u.registered}</td></tr>`).join('')+
+      '</tbody></table>';
+  }
+
+  async function updateStats(){
+    const products = await db.getAll('products');
+    const users = await db.getAll('users');
+    $('stat-products').textContent = products.length;
+    $('stat-users').textContent = users.length;
+  }
+
+  // ========================
+  // CHAT SYSTEM
+  // ========================
+  window.toggleChat = function(){
+    chatOpen=!chatOpen;
+    $('chat-window').classList.toggle('open',chatOpen);
+    if(chatOpen){ unreadCount=0; updateBadge(); $('chat-input').focus(); }
+  };
+
+  function updateBadge(){ const b=$('chat-badge'); b.textContent=unreadCount; b.classList.toggle('show',unreadCount>0); }
+
+  async function addMsg(text,sender,timeStr){
+    const body=$('chat-body');
+    const displayTime = timeStr || now();
+    const div=document.createElement('div');
+    div.className='chat-msg '+sender;
+    div.innerHTML = sender==='bot'
+      ? '<div class="avatar-small">B</div><div><div class="bubble">'+sanitize(text)+'</div><div class="time">'+displayTime+'</div></div>'
+      : '<div><div class="bubble">'+sanitize(text)+'</div><div class="time">'+displayTime+'</div></div>';
+    body.appendChild(div);
+    body.scrollTop=body.scrollHeight;
+    await db.put('chat', {sender,text,time:Date.now()*1000 + Math.floor(Math.random()*1000), displayTime});
+  }
+
+  function showTyping(){
+    const body=$('chat-body');
+    const el=document.createElement('div'); el.className='chat-typing'; el.id='typing-indicator';
+    el.innerHTML='<span></span><span></span><span></span>';
+    body.appendChild(el); body.scrollTop=body.scrollHeight;
+  }
+  function hideTyping(){ const t=$('typing-indicator'); if(t) t.remove(); }
+
+  window.sendChat = async function(){
+    const input=$('chat-input'); const text=input.value.trim(); if(!text) return;
+    await addMsg(text,'user'); input.value='';
+    const cfg = await db.getConfig('bot', {mode:'auto',personality:'friendly',welcome:"Hello! Welcome to Bossy Company.",autoEnabled:true});
+    if(cfg.mode==='manual') return;
+    if(!botAuto) return;
+    processBotResponse(text);
+  };
+
+  async function processBotResponse(userText){
+    showTyping();
+    const cfg = await db.getConfig('bot', {mode:'auto',personality:'friendly',welcome:"Hello!",autoEnabled:true});
+    const delay = cfg.mode==='auto' ? 800+Math.random()*1200 : 2000;
+    setTimeout(async ()=>{
+      hideTyping();
+      const reply = await generateBotReply(userText.toLowerCase(), cfg);
+      await addMsg(reply,'bot');
+      if(!chatOpen){ unreadCount++; updateBadge(); }
+    }, delay);
+  }
+
+  async function generateBotReply(text, cfg){
+    const products = await db.getAll('products');
+    const p = cfg.personality;
+    const tones = {
+      friendly: ["Hey there! ", "Sure thing! ", "Absolutely! ", "I'd love to help! "],
+      professional: ["Certainly. ", "Of course. ", "Understood. ", "I'd be happy to assist. "],
+      casual: ["Yo! ", "No worries! ", "Gotcha! ", "For sure! "],
+      enthusiastic: ["Awesome! ", "Fantastic question! ", "Absolutely excited to help! ", "You bet! "]
+    };
+    const tone = tones[p] || tones.friendly;
+    const prefix = tone[Math.floor(Math.random()*tone.length)];
+
+    if(text.includes('product') || text.includes('item') || text.includes('buy') || text.includes('shop') || text.includes('catalog')){
+      if(products.length===0) return prefix + "We're currently updating our catalog. New products will be available very soon!";
+      const list = products.slice(0,3).map(x=>x.name).join(', ');
+      return prefix + 'We have '+products.length+' product(s) available. Some highlights: '+list+'. Would you like details on any specific item?';
+    }
+    if(text.includes('price') || text.includes('cost') || text.includes('how much')){
+      if(products.length===0) return prefix + "Pricing will be available once our catalog launches. Stay tuned!";
+      return prefix + 'Our products range across various price points. Check the Products section for full details!';
+    }
+    if(text.includes('register') || text.includes('sign up') || text.includes('account') || text.includes('join')){
+      return prefix + "You can register by scrolling to the 'Join the Community' section or clicking 'Join Now' in the menu. It's quick and free!";
+    }
+    if(text.includes('contact') || text.includes('phone') || text.includes('email') || text.includes('reach')){
+      return prefix + "You can reach us anytime through this chat, or visit our About section for more information. Our team is available 24/7!";
+    }
+    if(text.includes('hello') || text.includes('hi') || text.includes('hey')){
+      return prefix + "Hello! Welcome to Bossy Company. I'm your AI assistant. Ask me about our products, services, or how to join our community!";
+    }
+    if(text.includes('help') || text.includes('support')){
+      return prefix + "I'm here to help! I can tell you about our products, guide you through registration, or answer general questions. What do you need?";
+    }
+    if(text.includes('about') || text.includes('company') || text.includes('who are you')){
+      return prefix + "Bossy Company delivers premium products and services with a focus on quality and customer satisfaction. We've built a community-driven platform that evolves based on your feedback.";
+    }
+    if(text.includes('feature') || text.includes('service')){
+      return prefix + "We offer custom product lines, 24/7 AI-powered support, exclusive member benefits, and a growing catalog curated for quality.";
+    }
+    if(text.includes('thank')){
+      return prefix + "You're very welcome! Let me know if there's anything else I can do for you.";
+    }
+    if(text.includes('bye') || text.includes('goodbye')){
+      return prefix + "Goodbye! Feel free to come back anytime. Bossy Company is always here for you!";
+    }
+    if(products.length>0 && Math.random()>0.5){
+      return prefix + "I'm not sure I understood that perfectly. Would you like to know about our latest product: "+products[0].name+"? Or I can help you register for exclusive access!";
+    }
+    return prefix + "I'm here to assist! You can ask me about our products, how to register, or what makes Bossy Company special.";
+  }
+
+  function showOwnerControls(){ $('owner-chat-controls').classList.add('show'); }
+  function hideOwnerControls(){ $('owner-chat-controls').classList.remove('show'); }
+
+  window.sendOwnerReply = async function(){
+    const input=$('owner-reply'); const text=input.value.trim(); if(!text) return;
+    await addMsg('[Owner] '+text,'bot'); input.value='';
+  };
+
+  window.toggleBotAuto = function(){
+    botAuto=!botAuto;
+    $('btn-bot-auto').textContent = botAuto ? 'Pause Auto' : 'Resume Auto';
+    toast(botAuto ? 'Bot auto-reply enabled':'Bot auto-reply paused', botAuto?'ok':'info');
+  };
+
+  // ========================
+  // BOT SETTINGS
+  // ========================
+  window.setBotMode = async function(v){
+    const c = await db.getConfig('bot',{mode:'auto',personality:'friendly',welcome:"Hello!",autoEnabled:true});
+    c.mode=v; await db.setConfig('bot',c); updateBotStatus(c); botAuto = v !== 'manual';
+    $('btn-bot-auto').textContent = botAuto ? 'Pause Auto' : 'Resume Auto';
+  };
+  window.setBotPersonality = async function(v){
+    const c = await db.getConfig('bot',{mode:'auto',personality:'friendly',welcome:"Hello!",autoEnabled:true});
+    c.personality=v; await db.setConfig('bot',c);
+  };
+  window.setBotWelcome = async function(v){
+    const c = await db.getConfig('bot',{mode:'auto',personality:'friendly',welcome:"Hello!",autoEnabled:true});
+    if(v.trim()) c.welcome=v.trim(); await db.setConfig('bot',c);
+  };
+  window.broadcastBotMsg = async function(){
+    const msg = prompt('Enter broadcast message for all visitors:'); if(!msg) return;
+    await addMsg('[Announcement] '+msg,'bot'); toast('Broadcast sent','ok');
+  };
+  window.clearChatHistory = async function(){
+    if(!confirm('Clear all chat history?')) return;
+    await db.clear('chat'); $('chat-body').innerHTML=''; toast('Chat history cleared','ok');
+  };
+
+  async function loadBotSettings(){
+    const c = await db.getConfig('bot',{mode:'auto',personality:'friendly',welcome:"Hello! Welcome to Bossy Company. I'm here to help you explore our products and answer any questions. What can I do for you today?",autoEnabled:true});
+    $('bot-mode').value=c.mode;
+    $('bot-personality').value=c.personality;
+    $('bot-custom-msg').value=c.welcome||'';
+    botAuto = c.mode !== 'manual';
+    $('btn-bot-auto').textContent = botAuto ? 'Pause Auto' : 'Resume Auto';
+    updateBotStatus(c);
+  }
+  function updateBotStatus(c){
+    const status = c.mode==='auto'?'Online — Autonomous':c.mode==='guided'?'Online — Guided':'Online — Manual';
+    $('bot-status-display').textContent=status;
+  }
+
+  // ========================
+  // SCROLL REVEALS
+  // ========================
+  function observeReveals(){
+    const obs=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  }
+
+  function bindUI(){
+    const loginForm = $('login-form');
+    const registerForm = $('register-form');
+    const uploadForm = $('upload-form');
+    const adminTabs = $('admin-tabs');
+
+    $('nav-admin-btn').addEventListener('click', openAdmin);
+    $('nav-login-btn').addEventListener('click', ()=>openModal('login-modal'));
+    $('nav-logout-btn').addEventListener('click', logout);
+    $('btn-open-google').addEventListener('click', openGoogle);
+    $('btn-open-chrome').addEventListener('click', openChrome);
+    $('login-close-btn').addEventListener('click', ()=>closeModal('login-modal'));
+    $('admin-close-btn').addEventListener('click', ()=>closeModal('admin-modal'));
+    $('admin-verify-btn').addEventListener('click', verifyAdmin);
+    $('admin-signout-btn').addEventListener('click', adminLogout);
+    $('btn-broadcast').addEventListener('click', broadcastBotMsg);
+    $('btn-clear-chat').addEventListener('click', clearChatHistory);
+    $('btn-chat-close').addEventListener('click', toggleChat);
+    $('btn-owner-send').addEventListener('click', sendOwnerReply);
+    $('btn-bot-auto').addEventListener('click', toggleBotAuto);
+    $('btn-chat-send').addEventListener('click', sendChat);
+    $('btn-chat-toggle').addEventListener('click', toggleChat);
+
+    if(loginForm) loginForm.addEventListener('submit', handleLogin);
+    if(registerForm) registerForm.addEventListener('submit', handleRegister);
+    if(uploadForm) uploadForm.addEventListener('submit', handleUpload);
+    $('up-image').addEventListener('change', (e)=>previewImage(e.target));
+    $('bot-mode').addEventListener('change', (e)=>setBotMode(e.target.value));
+    $('bot-personality').addEventListener('change', (e)=>setBotPersonality(e.target.value));
+    $('bot-custom-msg').addEventListener('change', (e)=>setBotWelcome(e.target.value));
+    $('owner-reply').addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendOwnerReply(); });
+    $('chat-input').addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendChat(); });
+
+    const adminPasswordForm = $('admin-password-form');
+    const adminNotifyBtn = $('admin-notify-password-btn');
+    if(adminPasswordForm) adminPasswordForm.addEventListener('submit', changeOwnerPassword);
+    if(adminNotifyBtn) adminNotifyBtn.addEventListener('click', notifyOwnerPasswordChange);
+
+    if(adminTabs){
+      adminTabs.addEventListener('click', (e)=>{
+        const btn=e.target.closest('.admin-tab');
+        if(!btn) return;
+        switchAdminTab(btn.dataset.tab, btn);
+      });
+    }
+
+    const loginModal = $('login-modal');
+    const adminModal = $('admin-modal');
+    if(loginModal){ loginModal.addEventListener('click', (e)=>{ if(e.target===loginModal) closeModal('login-modal'); }); }
+    if(adminModal){ adminModal.addEventListener('click', (e)=>{ if(e.target===adminModal) closeModal('admin-modal'); }); }
+
+    const manageList = $('manage-list');
+    if(manageList){
+      manageList.addEventListener('click', (e)=>{
+        const btn = e.target.closest('.delete-product-btn');
+        if(!btn) return;
+        const id = Number(btn.dataset.id);
+        if(id) deleteProduct(id);
+      });
+    }
+  }
+
+  // Header shadow
+  window.addEventListener('scroll',()=>{
+    const h=document.querySelector('.site-header');
+    h.style.boxShadow = window.scrollY>10 ? '0 4px 30px rgba(0,0,0,0.3)' : 'none';
+  });
+
+  // ========================
+  // INIT
+  // ========================
+  async function init(){
+    await db.init();
+    await migrateLegacy();
+
+    // Restore session
+    const sess = sessionStorage.getItem('bossy_session');
+    if(sess){
+      try{
+        const userId = Number(sess);
+        if(Number.isFinite(userId)){
+          const user = await db.get('users', userId);
+          if(user) currentUser = user;
+        }
+      }catch(e){ console.warn('Session restore failed', e); }
+    }
+    updateAuthUI();
+    await renderProducts();
+    await updateStats();
+    bindUI();
+    observeReveals();
+
+    // Load chat history
+    const hist = await db.getAll('chat');
+    const cfg = await db.getConfig('bot',{mode:'auto',personality:'friendly',welcome:"Hello! Welcome to Bossy Company. I'm here to help you explore our products and answer any questions. What can I do for you today?",autoEnabled:true});
+    if(hist.length===0){
+      await addMsg(cfg.welcome,'bot',now());
+    } else {
+      const body=$('chat-body');
+      hist.forEach(m=>{
+        const displayTime = m.displayTime || m.time || now();
+        const div=document.createElement('div'); div.className='chat-msg '+m.sender;
+        div.innerHTML = m.sender==='bot'
+          ? '<div class="avatar-small">B</div><div><div class="bubble">'+sanitize(m.text)+'</div><div class="time">'+displayTime+'</div></div>'
+          : '<div><div class="bubble">'+sanitize(m.text)+'</div><div class="time">'+displayTime+'</div></div>';
+        body.appendChild(div);
+      });
+      body.scrollTop = body.scrollHeight;
+    }
+
+    // Remove loading screen
+    setTimeout(()=>{
+      document.getElementById('load-screen').classList.add('done');
+    }, 800);
+  }
+
+  init().catch(err=>{
+    console.error('Init error:',err);
+    toast('Failed to initialize local database. Please refresh.','err');
+  });
+
+})();
+</script>
+
+<script src="/config.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
